@@ -86,10 +86,16 @@ class JSONWebTokenLoginHandler(BaseHandler):
 
     @staticmethod
     def verify_jwt_with_claims(token, signing_certificate, audience):
+        print("verify_jwt_with_claims")
         opts = {}
         if not audience:
             opts = {"verify_aud": False}
         with open(signing_certificate, 'r') as rsa_public_key_file:
+            print(rsa_public_key_file.read())
+        with open(signing_certificate, 'r') as rsa_public_key_file:
+            print(token)
+            print(audience)
+            print(opts)
             return jwt.decode(token, rsa_public_key_file.read(), audience=audience, options=opts)
 
     @staticmethod
@@ -101,6 +107,7 @@ class JSONWebTokenLoginHandler(BaseHandler):
 
     @staticmethod
     def retrieve_username(claims, username_claim_field, extract_username):
+        print("retrieve_username")
         username = claims[username_claim_field]
         if extract_username:
             if "@" in username:
