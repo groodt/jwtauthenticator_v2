@@ -53,6 +53,7 @@ class JSONWebTokenLoginHandler(BaseHandler):
         elif auth_header_content:
             token = auth_header_content
         elif auth_cookie_content:
+            print("using cookie")
             token = auth_cookie_content
         elif auth_param_content:
             token = auth_param_content
@@ -63,6 +64,7 @@ class JSONWebTokenLoginHandler(BaseHandler):
             if secret:
                 claims = self.verify_jwt_using_secret(token, secret, algorithms, audience)
             elif signing_certificate:
+                print("using signing_certificate")
                 claims = self.verify_jwt_with_claims(token, signing_certificate, audience)
             else:
                 return self.auth_failed(auth_url)
@@ -70,6 +72,7 @@ class JSONWebTokenLoginHandler(BaseHandler):
             return self.auth_failed(auth_url)
 
         username = self.retrieve_username(claims, username_claim_field, extract_username=extract_username)
+        print("username is " + username)
         user = await self.auth_to_user({'name': username})
         self.set_login_cookie(user)
 
